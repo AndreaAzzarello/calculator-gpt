@@ -12,6 +12,8 @@ let currentInput = '0';
 let previousInput = '';
 let calculationOperator = '';
 let resetInput = false;
+let firstPowerNumber = '';
+let isPowerOperation = false;
 
 // Toggle between standard and scientific calculator
 standardToggle.addEventListener('click', () => {
@@ -71,6 +73,17 @@ function handleOperator(value) {
 }
 
 function handleEquals() {
+    if (isPowerOperation) {
+        // Esegui l'operazione di potenza
+        const base = parseFloat(firstPowerNumber);
+        const exponent = parseFloat(currentInput);
+        currentInput = Math.pow(base, exponent).toString();
+        calcHistory.textContent = `${firstPowerNumber} ^ ${exponent} =`;
+        isPowerOperation = false;
+        resetInput = true;
+        return;
+    }
+    
     if (!calculationOperator || resetInput) return;
     
     const prev = parseFloat(previousInput);
@@ -131,6 +144,13 @@ function handleScientificFunction(value) {
             break;
         case 'x²':
             currentInput = (num * num).toString();
+            break;
+        case 'x^y':
+            // Salva il numero corrente come base e prepara per l'esponente
+            firstPowerNumber = currentInput;
+            isPowerOperation = true;
+            resetInput = true;
+            calcHistory.textContent = `${firstPowerNumber} ^ `;
             break;
         case '1/x':
             currentInput = (1 / num).toString();
