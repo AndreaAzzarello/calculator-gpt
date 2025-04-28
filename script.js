@@ -297,11 +297,9 @@ calculatorCards.forEach(card => {
 
 // Add sample chat messages for demonstration
 setTimeout(() => {
-    appendMessage("Puoi aiutarmi a calcolare la rata mensile di un mutuo di €200,000 al 3% per 25 anni?", "user");
-    setTimeout(() => {
-        appendMessage("Certo! Per un mutuo di €200,000 al tasso del 3% per 25 anni, la rata mensile sarebbe di circa €948.42. Vuoi che ti spieghi come ho calcolato questo importo?", "bot");
-    }, 1000);
+    appendMessage("Ciao come posso aiutarti?", "user");
 }, 3000);
+
 // Gestione del dropdown menu tramite click
 const dropdownButton = document.querySelector('.dropdown-button');
 const dropdownContent = document.querySelector('.dropdown-content');
