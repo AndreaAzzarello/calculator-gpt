@@ -481,6 +481,6 @@ footer {
     background-color: #f3f4f6;
 }
 
-.dropdown:hover .dropdown-content {
+.dropdown-content.show {
     display: block;
 }
