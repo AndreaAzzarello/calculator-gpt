@@ -300,20 +300,6 @@ setTimeout(() => {
     appendMessage("Ciao come posso aiutarti?", "user");
 }, 3000);
 
-// Gestione del dropdown menu tramite click
-const dropdownButton = document.querySelector('.dropdown-button');
-const dropdownContent = document.querySelector('.dropdown-content');
-
-// Aggiungi event listener per il click sul pulsante
-dropdownButton.addEventListener('click', function(event) {
-    // Previeni comportamenti predefiniti
-    event.preventDefault();
-    event.stopPropagation();
-    
-    // Mostra/nascondi il menu
-    dropdownContent.classList.toggle('show');
-});
-
 // Chiudi il dropdown se si clicca all'esterno
 document.addEventListener('click', function(event) {
     if (!event.target.matches('.dropdown-button')) {
@@ -321,4 +307,28 @@ document.addEventListener('click', function(event) {
             dropdownContent.classList.remove('show');
         }
     }
+});
+// Gestione del dropdown menu tramite click
+document.addEventListener('DOMContentLoaded', function() {
+    const dropdownButton = document.querySelector('.dropdown-button');
+    const dropdownContent = document.querySelector('.dropdown-content');
+
+    // Aggiungi event listener per il click sul pulsante
+    dropdownButton.addEventListener('click', function(event) {
+        // Previeni comportamenti predefiniti
+        event.preventDefault();
+        event.stopPropagation();
+        
+        // Mostra/nascondi il menu
+        dropdownContent.classList.toggle('show');
+    });
+
+    // Chiudi il dropdown se si clicca all'esterno
+    document.addEventListener('click', function(event) {
+        if (!event.target.matches('.dropdown-button') && !dropdownButton.contains(event.target)) {
+            if (dropdownContent.classList.contains('show')) {
+                dropdownContent.classList.remove('show');
+            }
+        }
+    });
 });
