@@ -295,10 +295,6 @@ calculatorCards.forEach(card => {
     });
 });
 
-// Add sample chat messages for demonstration
-setTimeout(() => {
-    appendMessage("Ciao come posso aiutarti?", "user");
-}, 3000);
 
 // Chiudi il dropdown se si clicca all'esterno
 document.addEventListener('click', function(event) {
