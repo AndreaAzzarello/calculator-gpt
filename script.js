@@ -304,27 +304,420 @@ document.addEventListener('click', function(event) {
         }
     }
 });
-// Gestione del dropdown menu tramite click
+// Gestione delle diverse calcolatrici
 document.addEventListener('DOMContentLoaded', function() {
+    // Riferimenti alle calcolatrici
+    const standardScientificCalculator = document.getElementById('standardScientificCalculator');
+    const financialCalculator = document.getElementById('financialCalculator');
+    const conversionCalculator = document.getElementById('conversionCalculator');
+    const healthCalculator = document.getElementById('healthCalculator');
+    const geometryCalculator = document.getElementById('geometryCalculator');
+    
+    // Riferimento al dropdown e ai link
     const dropdownButton = document.querySelector('.dropdown-button');
     const dropdownContent = document.querySelector('.dropdown-content');
-
-    // Aggiungi event listener per il click sul pulsante
-    dropdownButton.addEventListener('click', function(event) {
-        // Previeni comportamenti predefiniti
-        event.preventDefault();
-        event.stopPropagation();
-        
-        // Mostra/nascondi il menu
+    const dropdownLinks = dropdownContent.querySelectorAll('a');
+    
+    // Gestore per il click sul pulsante dropdown
+    dropdownButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
         dropdownContent.classList.toggle('show');
     });
-
-    // Chiudi il dropdown se si clicca all'esterno
-    document.addEventListener('click', function(event) {
-        if (!event.target.matches('.dropdown-button') && !dropdownButton.contains(event.target)) {
-            if (dropdownContent.classList.contains('show')) {
-                dropdownContent.classList.remove('show');
-            }
+    
+    // Gestore per chiudere il dropdown quando si clicca fuori
+    document.addEventListener('click', function(e) {
+        if (!dropdownButton.contains(e.target)) {
+            dropdownContent.classList.remove('show');
         }
     });
+    
+    // Funzione per nascondere tutte le calcolatrici
+    function hideAllCalculators() {
+        standardScientificCalculator.style.display = 'none';
+        financialCalculator.style.display = 'none';
+        conversionCalculator.style.display = 'none';
+        healthCalculator.style.display = 'none';
+        geometryCalculator.style.display = 'none';
+    }
+    
+    // Gestore per la selezione del tipo di calcolatrice
+    dropdownLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const calculatorType = this.textContent.trim();
+            
+            // Nascondi tutte le calcolatrici
+            hideAllCalculators();
+            
+            // Aggiorna il testo del pulsante dropdown
+            dropdownButton.textContent = calculatorType;
+            dropdownButton.appendChild(document.createElement('span')).textContent = " ▼";
+            
+            // Mostra la calcolatrice selezionata
+            switch(calculatorType) {
+                case 'Standard':
+                    standardScientificCalculator.style.display = 'block';
+                    standardToggle.click(); // Imposta modalità standard
+                    break;
+                case 'Scientifica':
+                    standardScientificCalculator.style.display = 'block';
+                    scientificToggle.click(); // Imposta modalità scientifica
+                    break;
+                case 'Finanziaria':
+                    financialCalculator.style.display = 'block';
+                    break;
+                case 'Conversione':
+                    conversionCalculator.style.display = 'block';
+                    populateConversionUnits('length'); // Imposta unità di default
+                    break;
+                case 'Salute & Fitness':
+                    healthCalculator.style.display = 'block';
+                    break;
+                case 'Geometria':
+                    geometryCalculator.style.display = 'block';
+                    updateGeometryInputs('square'); // Imposta figura di default
+                    break;
+            }
+            
+            // Chiudi il dropdown
+            dropdownContent.classList.remove('show');
+        });
+    });
+    
+    // ------------------------
+    // Calcolatrice Finanziaria
+    // ------------------------
+    const calculateFinancialBtn = document.getElementById('calculateFinancial');
+    if (calculateFinancialBtn) {
+        calculateFinancialBtn.addEventListener('click', function() {
+            const loanAmount = parseFloat(document.getElementById('loanAmount').value);
+            const interestRate = parseFloat(document.getElementById('interestRate').value) / 100 / 12; // tasso mensile
+            const loanTerm = parseInt(document.getElementById('loanTerm').value) * 12; // mesi totali
+            
+            // Formula rata mutuo
+            const monthlyPayment = loanAmount * interestRate * Math.pow(1 + interestRate, loanTerm) / 
+                                  (Math.pow(1 + interestRate, loanTerm) - 1);
+            
+            const totalAmount = monthlyPayment * loanTerm;
+            const totalInterest = totalAmount - loanAmount;
+            
+            // Aggiorna i risultati
+            document.getElementById('monthlyPayment').textContent = `€${monthlyPayment.toFixed(2)}`;
+            document.getElementById('totalInterest').textContent = `€${totalInterest.toFixed(2)}`;
+            document.getElementById('totalAmount').textContent = `€${totalAmount.toFixed(2)}`;
+        });
+    }
+    
+    // ------------------------
+    // Calcolatrice Conversione
+    // ------------------------
+    const conversionTypeSelect = document.getElementById('conversionType');
+    const calculateConversionBtn = document.getElementById('calculateConversion');
+    
+    // Funzione per popolare le unità di conversione in base al tipo
+    function populateConversionUnits(type) {
+        const fromUnitSelect = document.getElementById('fromUnit');
+        const toUnitSelect = document.getElementById('toUnit');
+        
+        // Svuota le opzioni esistenti
+        fromUnitSelect.innerHTML = '';
+        toUnitSelect.innerHTML = '';
+        
+        let units = [];
+        
+        switch(type) {
+            case 'length':
+                units = [
+                    { value: 'meters', label: 'Metri' },
+                    { value: 'kilometers', label: 'Chilometri' },
+                    { value: 'centimeters', label: 'Centimetri' },
+                    { value: 'feet', label: 'Piedi' },
+                    { value: 'inches', label: 'Pollici' }
+                ];
+                break;
+            case 'weight':
+                units = [
+                    { value: 'kilograms', label: 'Chilogrammi' },
+                    { value: 'grams', label: 'Grammi' },
+                    { value: 'pounds', label: 'Libbre' },
+                    { value: 'ounces', label: 'Once' }
+                ];
+                break;
+            case 'temperature':
+                units = [
+                    { value: 'celsius', label: 'Celsius' },
+                    { value: 'fahrenheit', label: 'Fahrenheit' },
+                    { value: 'kelvin', label: 'Kelvin' }
+                ];
+                break;
+            case 'area':
+                units = [
+                    { value: 'squareMeters', label: 'Metri quadrati' },
+                    { value: 'squareKilometers', label: 'Chilometri quadrati' },
+                    { value: 'hectares', label: 'Ettari' },
+                    { value: 'squareFeet', label: 'Piedi quadrati' },
+                    { value: 'acres', label: 'Acri' }
+                ];
+                break;
+        }
+        
+        // Aggiungi le opzioni ad entrambi i selettori
+        units.forEach(unit => {
+            const fromOption = document.createElement('option');
+            fromOption.value = unit.value;
+            fromOption.textContent = unit.label;
+            fromUnitSelect.appendChild(fromOption);
+            
+            const toOption = document.createElement('option');
+            toOption.value = unit.value;
+            toOption.textContent = unit.label;
+            toUnitSelect.appendChild(toOption);
+        });
+        
+        // Imposta opzioni diverse come default per rendere più chiara la conversione
+        if (units.length > 1) {
+            toUnitSelect.selectedIndex = 1;
+        }
+    }
+    
+    // Aggiorna le unità quando cambia il tipo di conversione
+    if (conversionTypeSelect) {
+        conversionTypeSelect.addEventListener('change', function() {
+            populateConversionUnits(this.value);
+        });
+    }
+    
+    // Esegui la conversione
+    if (calculateConversionBtn) {
+        calculateConversionBtn.addEventListener('click', function() {
+            const inputValue = parseFloat(document.getElementById('conversionInput').value);
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+            const conversionType = document.getElementById('conversionType').value;
+            
+            let result;
+            
+            // Converti prima in unità standard, poi nell'unità di destinazione
+            let standardValue;
+            
+            switch(conversionType) {
+                case 'length':
+                    // Converti in metri (unità standard)
+                    switch(fromUnit) {
+                        case 'meters': standardValue = inputValue; break;
+                        case 'kilometers': standardValue = inputValue * 1000; break;
+                        case 'centimeters': standardValue = inputValue / 100; break;
+                        case 'feet': standardValue = inputValue * 0.3048; break;
+                        case 'inches': standardValue = inputValue * 0.0254; break;
+                    }
+                    
+                    // Converti da metri all'unità di destinazione
+                    switch(toUnit) {
+                        case 'meters': result = standardValue; break;
+                        case 'kilometers': result = standardValue / 1000; break;
+                        case 'centimeters': result = standardValue * 100; break;
+                        case 'feet': result = standardValue / 0.3048; break;
+                        case 'inches': result = standardValue / 0.0254; break;
+                    }
+                    break;
+                    
+                case 'weight':
+                    // Implementa conversioni di peso
+                    break;
+                    
+                case 'temperature':
+                    // Le conversioni di temperatura sono particolari
+                    if (fromUnit === 'celsius' && toUnit === 'fahrenheit') {
+                        result = (inputValue * 9/5) + 32;
+                    } else if (fromUnit === 'fahrenheit' && toUnit === 'celsius') {
+                        result = (inputValue - 32) * 5/9;
+                    } else if (fromUnit === 'celsius' && toUnit === 'kelvin') {
+                        result = inputValue + 273.15;
+                    } else if (fromUnit === 'kelvin' && toUnit === 'celsius') {
+                        result = inputValue - 273.15;
+                    } else if (fromUnit === 'fahrenheit' && toUnit === 'kelvin') {
+                        result = (inputValue - 32) * 5/9 + 273.15;
+                    } else if (fromUnit === 'kelvin' && toUnit === 'fahrenheit') {
+                        result = (inputValue - 273.15) * 9/5 + 32;
+                    } else {
+                        result = inputValue; // stessa unità
+                    }
+                    break;
+                    
+                case 'area':
+                    // Implementa conversioni di area
+                    break;
+            }
+            
+            document.getElementById('conversionResult').value = result.toFixed(4);
+        });
+    }
+    
+    // -----------------------
+    // Calcolatrice Salute
+    // -----------------------
+    const calculateHealthBtn = document.getElementById('calculateHealth');
+    if (calculateHealthBtn) {
+        calculateHealthBtn.addEventListener('click', function() {
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value) / 100; // converti in metri
+            const age = parseInt(document.getElementById('age').value);
+            const gender = document.getElementById('gender').value;
+            
+            // Calcola BMI
+            const bmi = weight / (height * height);
+            
+            // Determina categoria BMI
+            let category;
+            if (bmi < 18.5) {
+                category = "Sottopeso";
+            } else if (bmi < 25) {
+                category = "Normopeso";
+            } else if (bmi < 30) {
+                category = "Sovrappeso";
+            } else {
+                category = "Obesità";
+            }
+            
+            // Calcola metabolismo basale (formula di Harris-Benedict)
+            let bmr;
+            if (gender === 'male') {
+                bmr = 88.362 + (13.397 * weight) + (4.799 * height * 100) - (5.677 * age);
+            } else {
+                bmr = 447.593 + (9.247 * weight) + (3.098 * height * 100) - (4.330 * age);
+            }
+            
+            // Aggiorna i risultati
+            document.getElementById('bmiResult').textContent = bmi.toFixed(1);
+            document.getElementById('bmiCategory').textContent = category;
+            document.getElementById('caloriesResult').textContent = Math.round(bmr) + " kcal";
+        });
+    }
+    
+    // -----------------------
+    // Calcolatrice Geometria
+    // -----------------------
+    const shapeTypeSelect = document.getElementById('shapeType');
+    const calculateGeometryBtn = document.getElementById('calculateGeometry');
+    
+    // Funzione per aggiornare i campi di input in base alla figura geometrica
+    function updateGeometryInputs(shape) {
+        const geometryInputs = document.querySelector('.geometry-inputs');
+        
+        // Svuota i campi esistenti
+        geometryInputs.innerHTML = '';
+        
+        // Crea i campi appropriati per il tipo di figura
+        switch(shape) {
+            case 'square':
+                geometryInputs.innerHTML = `
+                    <div class="geometry-input-group">
+                        <label for="squareSide">Lato (cm)</label>
+                        <input type="number" id="squareSide" value="10">
+                    </div>
+                `;
+                break;
+                
+            case 'rectangle':
+                geometryInputs.innerHTML = `
+                    <div class="geometry-input-group">
+                        <label for="rectangleWidth">Larghezza (cm)</label>
+                        <input type="number" id="rectangleWidth" value="10">
+                    </div>
+                    <div class="geometry-input-group">
+                        <label for="rectangleHeight">Altezza (cm)</label>
+                        <input type="number" id="rectangleHeight" value="5">
+                    </div>
+                `;
+                break;
+                
+            case 'circle':
+                geometryInputs.innerHTML = `
+                    <div class="geometry-input-group">
+                        <label for="circleRadius">Raggio (cm)</label>
+                        <input type="number" id="circleRadius" value="5">
+                    </div>
+                `;
+                break;
+                
+            case 'triangle':
+                geometryInputs.innerHTML = `
+                    <div class="geometry-input-group">
+                        <label for="triangleBase">Base (cm)</label>
+                        <input type="number" id="triangleBase" value="10">
+                    </div>
+                    <div class="geometry-input-group">
+                        <label for="triangleHeight">Altezza (cm)</label>
+                        <input type="number" id="triangleHeight" value="8">
+                    </div>
+                    <div class="geometry-input-group">
+                        <label for="triangleSide1">Lato 1 (cm)</label>
+                        <input type="number" id="triangleSide1" value="6">
+                    </div>
+                    <div class="geometry-input-group">
+                        <label for="triangleSide2">Lato 2 (cm)</label>
+                        <input type="number" id="triangleSide2" value="8">
+                    </div>
+                `;
+                break;
+        }
+    }
+    
+    // Aggiorna i campi quando cambia il tipo di figura
+    if (shapeTypeSelect) {
+        shapeTypeSelect.addEventListener('change', function() {
+            updateGeometryInputs(this.value);
+        });
+    }
+    
+    // Esegui i calcoli geometrici
+    if (calculateGeometryBtn) {
+        calculateGeometryBtn.addEventListener('click', function() {
+            const shapeType = document.getElementById('shapeType').value;
+            let area, perimeter;
+            
+            switch(shapeType) {
+                case 'square':
+                    const side = parseFloat(document.getElementById('squareSide').value);
+                    area = side * side;
+                    perimeter = 4 * side;
+                    break;
+                    
+                case 'rectangle':
+                    const width = parseFloat(document.getElementById('rectangleWidth').value);
+                    const height = parseFloat(document.getElementById('rectangleHeight').value);
+                    area = width * height;
+                    perimeter = 2 * (width + height);
+                    break;
+                    
+                case 'circle':
+                    const radius = parseFloat(document.getElementById('circleRadius').value);
+                    area = Math.PI * radius * radius;
+                    perimeter = 2 * Math.PI * radius; // circonferenza
+                    break;
+                    
+                case 'triangle':
+                    const base = parseFloat(document.getElementById('triangleBase').value);
+                    const triangleHeight = parseFloat(document.getElementById('triangleHeight').value);
+                    const side1 = parseFloat(document.getElementById('triangleSide1').value);
+                    const side2 = parseFloat(document.getElementById('triangleSide2').value);
+                    area = (base * triangleHeight) / 2;
+                    perimeter = base + side1 + side2;
+                    break;
+            }
+            
+            // Aggiorna i risultati
+            document.getElementById('areaResult').textContent = `${area.toFixed(2)} cm²`;
+            
+            if (shapeType === 'circle') {
+                document.getElementById('perimeterResult').textContent = `${perimeter.toFixed(2)} cm (circonferenza)`;
+            } else {
+                document.getElementById('perimeterResult').textContent = `${perimeter.toFixed(2)} cm`;
+            }
+        });
+    }
+    
+    // Mostra la calcolatrice standard all'inizio
+    standardScientificCalculator.style.display = 'block';
 });
