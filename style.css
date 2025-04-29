@@ -553,30 +553,3 @@ label {
     font-size: 0.9rem;
     color: #4b5563;
 }
-/* Navigazione tra calcolatrici */
-.calculator-navigation {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 0.5rem;
-}
-.nav-btn {
-  background: var(--primary-color);
-  color: white;
-  border: none;
-  padding: 0.5rem 0.75rem;
-  font-size: 1.25rem;
-  border-radius: var(--border-radius);
-  cursor: pointer;
-}
-#calculatorName {
-  font-weight: 600;
-  font-size: 1.1rem;
-}
-
-/* Ultimo risultato */
-.last-result-container {
-  font-size: 0.95rem;
-  color: var(--dark-color);
-  margin-bottom: 1rem;
-}
