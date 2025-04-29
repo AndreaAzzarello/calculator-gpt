@@ -54,7 +54,7 @@
             </div>
 
             <div class="calculator-chat">
-                <div class="calculator">
+               <div class="calculator" id="standardScientificCalculator">
                     <div class="calculator-display">
                         <div class="calculator-history" id="calcHistory"></div>
                         <div class="calculator-input" id="calcInput">0</div>
@@ -101,6 +101,166 @@
                         <button class="calc-btn equals">=</button>
                     </div>
                 </div>
+				
+				<!-- Nuova calcolatrice Finanziaria -->
+				<div class="calculator calculator-type" id="financialCalculator" style="display: none;">
+					<div class="calculator-display">
+						<div class="calculator-history"></div>
+						<div class="calculator-input">0</div>
+					</div>
+					<div class="calculator-financial-inputs">
+						<div class="financial-input-group">
+							<label for="loanAmount">Importo prestito (€)</label>
+							<input type="number" id="loanAmount" value="100000">
+						</div>
+						<div class="financial-input-group">
+							<label for="interestRate">Tasso d'interesse (%)</label>
+							<input type="number" id="interestRate" value="3" step="0.1">
+						</div>
+						<div class="financial-input-group">
+							<label for="loanTerm">Durata (anni)</label>
+							<input type="number" id="loanTerm" value="25">
+						</div>
+						<button class="calc-btn equals" id="calculateFinancial">Calcola</button>
+					</div>
+					<div class="financial-results">
+						<div class="financial-result-item">
+							<span>Rata mensile:</span>
+							<span id="monthlyPayment">€0</span>
+						</div>
+						<div class="financial-result-item">
+							<span>Interessi totali:</span>
+							<span id="totalInterest">€0</span>
+						</div>
+						<div class="financial-result-item">
+							<span>Importo totale:</span>
+							<span id="totalAmount">€0</span>
+						</div>
+					</div>
+				</div>
+				
+				<!-- Calcolatrice Conversione -->
+				<div class="calculator calculator-type" id="conversionCalculator" style="display: none;">
+					<div class="calculator-display">
+						<div class="calculator-history"></div>
+						<div class="calculator-input">0</div>
+					</div>
+					<div class="conversion-controls">
+						<div class="conversion-group">
+							<label for="conversionType">Tipo di conversione</label>
+							<select id="conversionType">
+								<option value="length">Lunghezza</option>
+								<option value="weight">Peso</option>
+								<option value="temperature">Temperatura</option>
+								<option value="area">Area</option>
+							</select>
+						</div>
+						<div class="conversion-inputs">
+							<div class="conversion-input-group">
+								<input type="number" id="conversionInput" value="1">
+								<select id="fromUnit">
+									<option value="meters">Metri</option>
+									<option value="kilometers">Chilometri</option>
+									<option value="centimeters">Centimetri</option>
+									<option value="feet">Piedi</option>
+									<option value="inches">Pollici</option>
+								</select>
+							</div>
+							<span class="conversion-equals">=</span>
+							<div class="conversion-input-group">
+								<input type="number" id="conversionResult" readonly>
+								<select id="toUnit">
+									<option value="meters">Metri</option>
+									<option value="kilometers">Chilometri</option>
+									<option value="centimeters">Centimetri</option>
+									<option value="feet">Piedi</option>
+									<option value="inches">Pollici</option>
+								</select>
+							</div>
+						</div>
+						<button class="calc-btn equals" id="calculateConversion">Converti</button>
+					</div>
+				</div>
+				
+				<!-- Calcolatrice Salute & Fitness -->
+				<div class="calculator calculator-type" id="healthCalculator" style="display: none;">
+					<div class="calculator-display">
+						<div class="calculator-history"></div>
+						<div class="calculator-input">BMI</div>
+					</div>
+					<div class="health-calculator-inputs">
+						<div class="health-input-group">
+							<label for="weight">Peso (kg)</label>
+							<input type="number" id="weight" value="70">
+						</div>
+						<div class="health-input-group">
+							<label for="height">Altezza (cm)</label>
+							<input type="number" id="height" value="170">
+						</div>
+						<div class="health-input-group">
+							<label for="age">Età</label>
+							<input type="number" id="age" value="30">
+						</div>
+						<div class="health-input-group">
+							<label for="gender">Sesso</label>
+							<select id="gender">
+								<option value="male">Maschio</option>
+								<option value="female">Femmina</option>
+							</select>
+						</div>
+						<button class="calc-btn equals" id="calculateHealth">Calcola</button>
+					</div>
+					<div class="health-results">
+						<div class="health-result-item">
+							<span>BMI:</span>
+							<span id="bmiResult">0</span>
+						</div>
+						<div class="health-result-item">
+							<span>Categoria:</span>
+							<span id="bmiCategory">-</span>
+						</div>
+						<div class="health-result-item">
+							<span>Calorie giornaliere:</span>
+							<span id="caloriesResult">0</span>
+						</div>
+					</div>
+				</div>
+				
+				<!-- Calcolatrice Geometria -->
+				<div class="calculator calculator-type" id="geometryCalculator" style="display: none;">
+					<div class="calculator-display">
+						<div class="calculator-history"></div>
+						<div class="calculator-input">Geometria</div>
+					</div>
+					<div class="geometry-controls">
+						<div class="geometry-select-group">
+							<label for="shapeType">Figura geometrica</label>
+							<select id="shapeType">
+								<option value="square">Quadrato</option>
+								<option value="rectangle">Rettangolo</option>
+								<option value="circle">Cerchio</option>
+								<option value="triangle">Triangolo</option>
+							</select>
+						</div>
+						<div class="geometry-inputs" id="squareInputs">
+							<div class="geometry-input-group">
+								<label for="squareSide">Lato (cm)</label>
+								<input type="number" id="squareSide" value="10">
+							</div>
+						</div>
+						<button class="calc-btn equals" id="calculateGeometry">Calcola</button>
+					</div>
+					<div class="geometry-results">
+						<div class="geometry-result-item">
+							<span>Area:</span>
+							<span id="areaResult">0 cm²</span>
+						</div>
+						<div class="geometry-result-item">
+							<span>Perimetro:</span>
+							<span id="perimeterResult">0 cm</span>
+						</div>
+					</div>
+				</div>
                 
                 <div class="chat-interface">
                     <div class="chat-messages" id="chatMessages">
