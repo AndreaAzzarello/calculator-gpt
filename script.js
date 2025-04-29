@@ -7,6 +7,8 @@ const scientificButtons = document.getElementById('scientificButtons');
 const chatMessages = document.getElementById('chatMessages');
 const chatInputField = document.getElementById('chatInputField');
 const sendMessageBtn = document.getElementById('sendMessageBtn');
+const lastResultSpan = document.getElementById('lastResult');
+
 
 let currentInput = '0';
 let previousInput = '';
@@ -57,6 +59,7 @@ function handleNumber(value) {
         // Prevent multiple decimal points
         if (value === '.' && currentInput.includes('.')) return;
         currentInput += value;
+
     }
 }
 
@@ -68,6 +71,8 @@ function handleOperator(value) {
     calculationOperator = value;
     resetInput = true;
     calcHistory.textContent = `${previousInput} ${calculationOperator}`;
+    lastResultSpan.textContent = monthlyPayment.toFixed(2);
+
 }
 
 function handleEquals() {
@@ -97,6 +102,7 @@ function handleEquals() {
     
     calcHistory.textContent = `${previousInput} ${calculationOperator} ${currentInput} =`;
     currentInput = result.toString();
+    lastResultSpan.textContent = result.toString();
     calculationOperator = '';
     resetInput = true;
 }
@@ -263,6 +269,8 @@ function processCalculation(message) {
             // Update calculator display
             previousInput = expr;
             currentInput = result.toString();
+            lastResultSpan.textContent = result.toString();
+
             calcHistory.textContent = `${expr} =`;
             updateCalculatorDisplay();
         }
@@ -404,6 +412,8 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Aggiorna i risultati
             document.getElementById('monthlyPayment').textContent = `€${monthlyPayment.toFixed(2)}`;
+            lastResultSpan.textContent = monthlyPayment.toFixed(2);
+
             document.getElementById('totalInterest').textContent = `€${totalInterest.toFixed(2)}`;
             document.getElementById('totalAmount').textContent = `€${totalAmount.toFixed(2)}`;
         });
@@ -551,6 +561,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             document.getElementById('conversionResult').value = result.toFixed(4);
+            lastResultSpan.textContent = result.toFixed(4);
+
         });
     }
     
@@ -590,6 +602,8 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Aggiorna i risultati
             document.getElementById('bmiResult').textContent = bmi.toFixed(1);
+            lastResultSpan.textContent = bmi.toFixed(1);
+
             document.getElementById('bmiCategory').textContent = category;
             document.getElementById('caloriesResult').textContent = Math.round(bmr) + " kcal";
         });
@@ -709,6 +723,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Aggiorna i risultati
             document.getElementById('areaResult').textContent = `${area.toFixed(2)} cm²`;
+            lastResultSpan.textContent = area.toFixed(2);
             
             if (shapeType === 'circle') {
                 document.getElementById('perimeterResult').textContent = `${perimeter.toFixed(2)} cm (circonferenza)`;
